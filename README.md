@@ -2,7 +2,7 @@
 
 **AI-Powered Autonomous DevOps System for NodeOps Proof of Build DePIN Hackathon**
 
-AutoDeploy.AI automatically analyzes GitHub repositories, generates optimized Dockerfiles using GPT-4, and deploys containerized applications to NodeOps infrastructure with one click.
+AutoDeploy.AI automatically analyzes GitHub repositories, generates optimized Dockerfiles using advanced AI models, and deploys containerized applications to NodeOps infrastructure with one click.
 
 ![AutoDeploy.AI](https://img.shields.io/badge/Status-MVP-green) ![License](https://img.shields.io/badge/License-MIT-blue) ![Node](https://img.shields.io/badge/Node-18+-brightgreen) ![React](https://img.shields.io/badge/React-18+-blue)
 
@@ -10,7 +10,7 @@ AutoDeploy.AI automatically analyzes GitHub repositories, generates optimized Do
 
 ## ✨ Features
 
-- 🤖 **AI-Powered Analysis**: GPT-4 analyzes your codebase and detects tech stack
+- 🤖 **AI-Powered Analysis**: Advanced AI models analyze your codebase and detect tech stack
 - 🐳 **Smart Dockerfile Generation**: Creates optimized, production-ready Dockerfiles
 - ⚡ **One-Click Deployment**: Deploy to NodeOps with a single button click
 - 📊 **Real-Time Dashboard**: Monitor logs, metrics, and container health
@@ -68,9 +68,15 @@ AutoDeploy.AI automatically analyzes GitHub repositories, generates optimized Do
    Edit `.env` and add your AI API credentials:
    ```env
    AI_API_KEY=your-ai-api-key
-   AI_BASE_URL=https://api.a4f.co/v1
    AI_MODEL=provider-1/qwen2.5-coder-32b-instruct
    ```
+   
+   **Available AI Models**: Choose from 100+ models including:
+   - `provider-1/qwen2.5-coder-32b-instruct` (Recommended for code analysis)
+   - `provider-3/deepseek-v3`
+   - `provider-3/gpt-4o-mini`
+   - `provider-1/deepseek-v3.1`
+   - And many more! See full list in your AI provider dashboard.
 
 3. **Start with Docker Compose**
    ```bash
@@ -181,8 +187,8 @@ npm run dev
 ## 🎯 Usage Flow
 
 1. **Enter GitHub URL**: Paste any public GitHub repository URL
-2. **AI Analysis**: System clones repo and analyzes with GPT-4
-3. **Review Dockerfile**: See the generated optimized Dockerfile
+2. **AI Analysis**: System clones repo and analyzes with your selected AI model
+3. **Review Dockerfile**: See the generated optimized Dockerfile (compare multiple models!)
 4. **Deploy**: Click to deploy to NodeOps (mock simulation)
 5. **Monitor**: View real-time logs, metrics, and uptime
 
@@ -298,7 +304,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Key Innovations
 
-1. **AI-First Approach**: Leverages GPT-4 for intelligent Dockerfile generation
+1. **AI-First Approach**: Leverages advanced AI models for intelligent Dockerfile generation with multi-model comparison
 2. **NodeOps Integration**: Designed for decentralized infrastructure deployment
 3. **Developer Experience**: Reduces deployment time from hours to minutes
 4. **Production-Ready**: Security best practices and optimized builds
@@ -316,7 +322,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - **NodeOps** for the DePIN infrastructure platform
-- **OpenAI** for GPT-4 API access
+- **AI Providers** for advanced model APIs
 - **Vercel** for UI/UX inspiration
 - **The Open Source Community** for amazing tools
 
