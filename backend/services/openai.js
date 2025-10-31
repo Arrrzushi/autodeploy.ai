@@ -1,13 +1,25 @@
 const OpenAI = require('openai');
 
-// Using third-party AI API (OpenAI-compatible)
-const openai = new OpenAI({
-  apiKey: process.env.AI_API_KEY,
-  baseURL: process.env.AI_BASE_URL || 'https://api.a4f.co/v1',
-  defaultHeaders: {
-    'Content-Type': 'application/json',
-  },
-});
+function createClient() {
+  return new OpenAI({
+    apiKey: process.env.AI_API_KEY,
+    baseURL: process.env.AI_BASE_URL || 'https://api.a4f.co/v1',
+    defaultHeaders: { 'Content-Type': 'application/json' },
+  });
+}
+
+const openai = createClient();
+
+async function callModel(model, messages, options = {}) {
+  const client = openai;
+  const response = await client.chat.completions.create({
+    model,
+    messages,
+    temperature: options.temperature ?? 0.7,
+    max_tokens: options.max_tokens ?? 1500,
+  });
+  return response.choices[0].message.content?.trim() || '';
+}
 
 /**
  * Analyzes repository structure and provides insights
@@ -28,23 +40,18 @@ Please provide:
 
 Format your response as JSON with keys: language, framework, dependencies, deploymentStrategy, resources`;
 
-    const response = await openai.chat.completions.create({
-      model: process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct',
-      messages: [
+    const content = await callModel(
+      process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct',
+      [
         {
           role: 'system',
-          content: 'You are an expert DevOps engineer specializing in analyzing codebases and recommending optimal deployment strategies. Provide concise, actionable insights in JSON format.'
+          content:
+            'You are an expert DevOps engineer specializing in analyzing codebases and recommending optimal deployment strategies. Provide concise, actionable insights in JSON format.',
         },
-        {
-          role: 'user',
-          content: prompt
-        }
+        { role: 'user', content: prompt },
       ],
-      temperature: 0.7,
-      max_tokens: 1000
-    });
-
-    const content = response.choices[0].message.content;
+      { max_tokens: 1000 }
+    );
     
     // Try to parse JSON response
     try {
@@ -90,23 +97,18 @@ Requirements:
 
 Provide ONLY the Dockerfile content without any explanation or markdown formatting.`;
 
-    const response = await openai.chat.completions.create({
-      model: process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct',
-      messages: [
+    let dockerfile = await callModel(
+      process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct',
+      [
         {
           role: 'system',
-          content: 'You are an expert DevOps engineer specializing in containerization and Docker optimization. Generate production-ready Dockerfiles following best practices for security, performance, and size optimization.'
+          content:
+            'You are an expert DevOps engineer specializing in containerization and Docker optimization. Generate production-ready Dockerfiles following best practices for security, performance, and size optimization.',
         },
-        {
-          role: 'user',
-          content: prompt
-        }
+        { role: 'user', content: prompt },
       ],
-      temperature: 0.7,
-      max_tokens: 1500
-    });
-
-    let dockerfile = response.choices[0].message.content.trim();
+      { max_tokens: 1500 }
+    );
     
     // Remove markdown code blocks if present
     dockerfile = dockerfile.replace(/```dockerfile\n?/g, '').replace(/```\n?/g, '');
@@ -137,23 +139,17 @@ Include:
 
 Provide ONLY the configuration file content.`;
 
-    const response = await openai.chat.completions.create({
-      model: process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct',
-      messages: [
+    return await callModel(
+      process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct',
+      [
         {
           role: 'system',
-          content: 'You are a DevOps expert. Generate clean, production-ready CI/CD configurations.'
+          content: 'You are a DevOps expert. Generate clean, production-ready CI/CD configurations.',
         },
-        {
-          role: 'user',
-          content: prompt
-        }
+        { role: 'user', content: prompt },
       ],
-      temperature: 0.7,
-      max_tokens: 1000
-    });
-
-    return response.choices[0].message.content.trim();
+      { max_tokens: 1000 }
+    );
   } catch (error) {
     console.error('OpenAI API Error:', error.message);
     throw new Error(`Failed to generate CI/CD config: ${error.message}`);
@@ -165,5 +161,54 @@ module.exports = {
   generateDockerfile,
   generateCIConfig
 };
+
+// Multi-model helpers
+async function analyzeRepositoryMulti(structure, models = []) {
+  const useModels = models.length > 0 ? models : [process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct'];
+  const prompt = `Analyze this repository structure and provide insights as JSON (language, framework, dependencies, deploymentStrategy, resources)\n\n${JSON.stringify(structure, null, 2)}`;
+  const system = 'You are an expert DevOps engineer. Respond strictly with JSON.';
+  const tasks = useModels.map(async (model) => {
+    try {
+      const content = await callModel(model, [
+        { role: 'system', content: system },
+        { role: 'user', content: prompt },
+      ], { max_tokens: 1000 });
+      let parsed;
+      try { parsed = JSON.parse(content); } catch { parsed = { raw: content }; }
+      return { model, ok: true, result: parsed };
+    } catch (e) {
+      return { model, ok: false, error: e.message };
+    }
+  });
+  return Promise.all(tasks);
+}
+
+async function generateDockerfileMulti(analysis, repoStructure, models = []) {
+  const useModels = models.length > 0 ? models : [process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct'];
+  const prompt = `Generate a production-ready Dockerfile.\nLanguage: ${analysis.language}\nFramework: ${analysis.framework}\nDependencies: ${JSON.stringify(analysis.dependencies)}\nRepo: ${JSON.stringify(repoStructure, null, 2)}\nRequirements: multi-stage, caching, official base, non-root, healthcheck. Return only Dockerfile.`;
+  const system = 'You are a Docker expert. Return only Dockerfile text.';
+  const tasks = useModels.map(async (model) => {
+    try {
+      let content = await callModel(model, [
+        { role: 'system', content: system },
+        { role: 'user', content: prompt },
+      ], { max_tokens: 1500 });
+      content = content.replace(/```dockerfile\n?/g, '').replace(/```\n?/g, '');
+      return { model, ok: true, dockerfile: content };
+    } catch (e) {
+      return { model, ok: false, error: e.message };
+    }
+  });
+  return Promise.all(tasks);
+}
+
+async function chat(model, messages) {
+  const selected = model || (process.env.AI_MODEL || 'provider-1/qwen2.5-coder-32b-instruct');
+  return callModel(selected, messages, { max_tokens: 1500 });
+}
+
+module.exports.analyzeRepositoryMulti = analyzeRepositoryMulti;
+module.exports.generateDockerfileMulti = generateDockerfileMulti;
+module.exports.chat = chat;
 
 

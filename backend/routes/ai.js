@@ -14,7 +14,7 @@ router.post('/analyze-repo', async (req, res) => {
   let repoPath = null;
 
   try {
-    const { repoUrl } = req.body;
+    const { repoUrl, models } = req.body;
 
     if (!repoUrl) {
       return res.status(400).json({ error: 'Repository URL is required' });
@@ -33,8 +33,14 @@ router.post('/analyze-repo', async (req, res) => {
     // Analyze structure
     const structure = await githubService.analyzeStructure(repoPath);
 
-    // Get AI analysis
-    const analysis = await openaiService.analyzeRepository(structure);
+    // Get AI analysis (single or multi-model)
+    let analysis = null;
+    if (Array.isArray(models) && models.length > 0) {
+      const results = await openaiService.analyzeRepositoryMulti(structure, models);
+      analysis = { multi: results };
+    } else {
+      analysis = await openaiService.analyzeRepository(structure);
+    }
 
     // Combine results
     const result = {
@@ -71,7 +77,7 @@ router.post('/analyze-repo', async (req, res) => {
  */
 router.post('/generate-dockerfile', async (req, res) => {
   try {
-    const { analysis, structure, repoUrl } = req.body;
+    const { analysis, structure, repoUrl, models } = req.body;
 
     if (!analysis || !structure) {
       return res.status(400).json({ 
@@ -81,8 +87,17 @@ router.post('/generate-dockerfile', async (req, res) => {
 
     console.log(`Generating Dockerfile for ${analysis.language}`);
 
-    // Generate Dockerfile using AI
-    const dockerfile = await openaiService.generateDockerfile(analysis, structure);
+    // Generate Dockerfile using AI (single or multi-model)
+    let dockerfile = null;
+    let compare = null;
+    if (Array.isArray(models) && models.length > 0) {
+      compare = await openaiService.generateDockerfileMulti(analysis, structure, models);
+      // Choose first successful as primary output
+      const firstOk = compare.find(r => r.ok && r.dockerfile);
+      dockerfile = firstOk?.dockerfile || '';
+    } else {
+      dockerfile = await openaiService.generateDockerfile(analysis, structure);
+    }
 
     // Save project to database
     const project = await prisma.project.create({
@@ -96,12 +111,35 @@ router.post('/generate-dockerfile', async (req, res) => {
     res.json({
       projectId: project.id,
       dockerfile,
+      compare,
       timestamp: new Date()
     });
   } catch (error) {
     console.error('Error generating Dockerfile:', error);
     res.status(500).json({ 
       error: 'Failed to generate Dockerfile',
+      details: error.message 
+    });
+  }
+});
+
+/**
+ * POST /api/chat
+ * Generic chat endpoint for a selected model
+ */
+router.post('/chat', async (req, res) => {
+  try {
+    const { model, messages } = req.body || {};
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return res.status(400).json({ error: 'messages[] is required' });
+    }
+
+    const reply = await openaiService.chat(model, messages);
+    res.json({ model: model || process.env.AI_MODEL, reply });
+  } catch (error) {
+    console.error('Error in chat endpoint:', error);
+    res.status(500).json({ 
+      error: 'Chat failed',
       details: error.message 
     });
   }
