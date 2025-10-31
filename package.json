@@ -1,0 +1,35 @@
+{
+  "name": "autodeploy-ai",
+  "version": "1.0.0",
+  "description": "AI-Powered Autonomous DevOps System for NodeOps",
+  "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "start": "docker-compose up",
+    "start:prod": "docker-compose -f docker-compose.prod.yml up -d",
+    "stop": "docker-compose down",
+    "clean": "bash scripts/cleanup.sh",
+    "test": "bash scripts/test-deployment.sh",
+    "logs": "docker-compose logs -f",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "keywords": [
+    "devops",
+    "docker",
+    "ai",
+    "automation",
+    "nodeops",
+    "deployment"
+  ],
+  "author": "AutoDeploy.AI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/autodeploy-ai.git"
+  }
+}
+
+
+
+
+

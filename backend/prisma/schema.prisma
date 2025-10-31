@@ -1,0 +1,73 @@
+// Prisma schema for AutoDeploy.AI
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String       @id @default(uuid())
+  repoUrl     String
+  analysis    Json
+  dockerfile  String
+  createdAt   DateTime     @default(now())
+
+  deployments Deployment[]
+
+  @@map("projects")
+}
+
+model Deployment {
+  id           String   @id @default(uuid())
+  projectId    String
+  containerUrl String
+  nodeLocation String
+  containerId  String
+  status       String
+  createdAt    DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("deployments")
+}
+
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String       @id @default(uuid())
+  repoUrl     String
+  analysis    Json
+  dockerfile  String       @db.Text
+  createdAt   DateTime     @default(now())
+  deployments Deployment[]
+
+  @@map("projects")
+}
+
+model Deployment {
+  id            String   @id @default(uuid())
+  projectId     String
+  containerUrl  String
+  nodeLocation  String
+  containerId   String
+  status        String   // pending, running, stopped
+  createdAt     DateTime @default(now())
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("deployments")
+}
+
+
