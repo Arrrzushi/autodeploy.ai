@@ -13,7 +13,6 @@ import {
   Activity,
   Monitor,
   Code2,
-  Docker,
   CheckCircle2,
   ArrowRight,
   Heart,
@@ -101,13 +100,13 @@ export default function Landing() {
   const steps = [
     { icon: Github, label: 'Paste GitHub URL' },
     { icon: Zap, label: 'AI Analysis' },
-    { icon: Docker, label: 'Dockerfile' },
+    { icon: Box, label: 'Dockerfile' },
     { icon: Rocket, label: 'Deploy' },
     { icon: Monitor, label: 'Monitor' },
   ];
 
   return (
-    <motion.div
+        <motion.div
       className="min-h-screen bg-bgDark"
       variants={pageVariants}
       initial="initial"
@@ -122,7 +121,7 @@ export default function Landing() {
         <div className="absolute inset-0 mesh-gradient opacity-50" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20">
-          <motion.div
+        <motion.div
             className="text-center"
             variants={staggerContainer}
             initial="initial"
@@ -144,30 +143,30 @@ export default function Landing() {
               Analyze. Dockerize. Deploy. Monitor — All in One Click.
             </motion.p>
 
-            <motion.div
+        <motion.div
               className="mt-12 mb-16 max-w-2xl mx-auto"
               variants={fadeInUp}
             >
               <GlassCard>
-                <div className="mb-6">
+          <div className="mb-6">
                   <label className="block text-sm font-medium text-textGrey mb-3">
-                    GitHub Repository URL
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              GitHub Repository URL
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <Github className="h-5 w-5 text-textGrey" />
-                    </div>
-                    <input
-                      type="text"
-                      value={repoUrl}
-                      onChange={(e) => setRepoUrl(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      placeholder="https://github.com/username/repository"
+              </div>
+              <input
+                type="text"
+                value={repoUrl}
+                onChange={(e) => setRepoUrl(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="https://github.com/username/repository"
                       className="input-premium pl-12"
-                      disabled={loading}
-                    />
-                  </div>
-                  {error && (
+                disabled={loading}
+              />
+            </div>
+            {error && (
                     <motion.p
                       className="mt-2 text-sm text-red-400"
                       initial={{ opacity: 0 }}
@@ -175,12 +174,12 @@ export default function Landing() {
                     >
                       {error}
                     </motion.p>
-                  )}
-                </div>
+            )}
+          </div>
 
                 <GradientButton
-                  onClick={handleAnalyze}
-                  disabled={loading}
+            onClick={handleAnalyze}
+            disabled={loading}
                   loading={loading}
                   className="w-full"
                 >
@@ -295,9 +294,9 @@ export default function Landing() {
             <p className="text-textGrey text-lg max-w-2xl mx-auto">
               Monitor your deployments with live metrics and logs
             </p>
-          </motion.div>
+        </motion.div>
 
-          <motion.div
+        <motion.div
             variants={fadeInUp}
             initial="initial"
             whileInView="animate"
@@ -341,10 +340,10 @@ export default function Landing() {
                     <div>[2024-01-01 12:34:58] Server listening on port 3000</div>
                   </div>
                 </div>
-              </div>
+            </div>
             </GlassCard>
           </motion.div>
-        </div>
+          </div>
       </section>
 
       {/* Security Section */}
@@ -394,8 +393,8 @@ export default function Landing() {
                 </GlassCard>
               </motion.div>
             ))}
+            </div>
           </div>
-        </div>
       </section>
 
       {/* Get Started Block */}
@@ -418,7 +417,7 @@ export default function Landing() {
               Try It Now <ArrowRight className="w-5 h-5" />
             </GradientButton>
           </motion.div>
-        </div>
+            </div>
       </section>
 
       {/* Footer */}
@@ -429,8 +428,8 @@ export default function Landing() {
               <h3 className="text-white font-heading font-bold mb-4">AutoDeploy.AI</h3>
               <p className="text-textGrey text-sm">
                 AI-powered autonomous DevOps for the modern developer
-              </p>
-            </div>
+            </p>
+          </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-textGrey text-sm">
@@ -460,8 +459,8 @@ export default function Landing() {
                   <Github className="w-5 h-5" />
                 </a>
               </div>
-            </div>
-          </div>
+      </div>
+    </div>
           <div className="border-t border-white/10 pt-8 text-center">
             <p className="text-textGrey text-sm">
               Built with <Heart className="w-4 h-4 inline text-red-500" /> for{' '}
