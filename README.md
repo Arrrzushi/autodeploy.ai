@@ -124,6 +124,7 @@ npm run dev
 |--------|----------|-------------|
 | `POST` | `/api/analyze-repo` | Analyze GitHub repository |
 | `POST` | `/api/generate-dockerfile` | Generate optimized Dockerfile |
+| `POST` | `/api/chat` | Generic chat with selected model |
 | `GET` | `/api/projects` | List all projects |
 | `GET` | `/api/projects/:id` | Get project details |
 
@@ -138,6 +139,37 @@ npm run dev
 
 ### Monitoring
 
+### Multi-model Compare (New)
+
+- Analysis with multiple models:
+  - POST `/api/analyze-repo`
+  - Body example:
+    ```json
+    { "repoUrl": "https://github.com/expressjs/express", "models": ["provider-1/qwen2.5-coder-32b-instruct", "provider-3/deepseek-v3"] }
+    ```
+  - Response includes `analysis.multi` with per-model results
+
+- Dockerfile generation with multiple models:
+  - POST `/api/generate-dockerfile`
+  - Body example:
+    ```json
+    { "analysis": {"language":"JS"}, "structure": {"files":[]}, "models": ["provider-1/qwen2.5-coder-32b-instruct", "provider-3/deepseek-v3"] }
+    ```
+  - Response includes `compare` array; `dockerfile` is the first successful
+
+### Chat (New)
+
+- POST `/api/chat`
+- Body:
+  ```json
+  {
+    "model": "provider-3/gpt-4o-mini",
+    "messages": [
+      {"role":"system","content":"You are a helpful assistant."},
+      {"role":"user","content":"Summarize this repo."}
+    ]
+  }
+  ```
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/api/logs/:deploymentId` | Get container logs |
