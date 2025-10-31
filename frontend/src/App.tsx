@@ -8,7 +8,7 @@ import Dashboard from './pages/Dashboard';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-950">
+      <div className="min-h-screen bg-bgDark">
         <Navbar />
         <Routes>
           <Route path="/" element={<Landing />} />
