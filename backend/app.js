@@ -5,6 +5,11 @@ const { prisma } = require('./prisma/client');
 const aiRoutes = require('./routes/ai');
 const deployRoutes = require('./routes/deploy');
 const logsRoutes = require('./routes/logs');
+const buildRoutes = require('./routes/build');
+const previewRoutes = require('./routes/previews');
+const securityRoutes = require('./routes/security');
+const healthSpecRoutes = require('./routes/healthspec');
+const nodeopsPlansRoutes = require('./routes/nodeops-plans');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -58,6 +63,16 @@ app.use((req, res, next) => {
 app.use('/api', aiRoutes);
 app.use('/api', deployRoutes);
 app.use('/api', logsRoutes);
+app.use('/api', buildRoutes);
+app.use('/api', previewRoutes);
+app.use('/api', securityRoutes);
+app.use('/api', healthSpecRoutes);
+app.use('/api', nodeopsPlansRoutes);
+
+// Background workers
+try {
+  require('./workers/reaper').start();
+} catch {}
 
 // Health check
 app.get('/health', (req, res) => {

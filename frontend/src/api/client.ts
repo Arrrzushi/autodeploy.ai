@@ -60,6 +60,26 @@ export const api = {
 
   getMetrics: (deploymentId: string) =>
     apiClient.get(`/api/metrics/${deploymentId}`),
+
+  // New endpoints
+  buildPreflight: (data: { repoUrl: string; branch?: string; preferredPort?: number; projectId?: string }) =>
+    apiClient.post('/api/build/preflight', data),
+
+  previewCreate: (data: { repoUrl: string; prRef?: string; env?: Record<string,string>; projectId?: string; ttlHours?: number; runMigrations?: boolean }) =>
+    apiClient.post('/api/previews/create', data),
+
+  previewDestroy: (id: string) =>
+    apiClient.post(`/api/previews/destroy/${id}`),
+
+  getSecurity: (projectId: string) =>
+    apiClient.get(`/api/security/${projectId}`),
+
+  healthSpec: (repoUrl: string) =>
+    apiClient.post('/api/health/spec', { repoUrl }),
+
+  getNodeopsPlans: () => apiClient.get('/api/nodeops/plans'),
+  deployNodeops: (data: { projectId: string; planId: string; region?: string; health?: any }) =>
+    apiClient.post('/api/deploy/nodeops', data),
 };
 
 

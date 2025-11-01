@@ -32,6 +32,21 @@ router.post('/deploy', async (req, res) => {
       }
     }
 
+    // Optional security gate if project has security summary
+    if (hasDB && projectId) {
+      try {
+        const project = await prisma.project.findUnique({ where: { id: projectId } });
+        const sec = project?.analysis?.security;
+        if (sec) {
+          const maxH = parseInt(process.env.SECURITY_MAX_HIGH ?? '999', 10);
+          const maxC = parseInt(process.env.SECURITY_MAX_CRITICAL ?? '0', 10);
+          if ((sec.critical ?? 0) > maxC || (sec.high ?? 0) > maxH) {
+            return res.status(400).json({ error: 'Security gate failed', security: sec });
+          }
+        }
+      } catch {}
+    }
+
     // Create a deployment ID to align DB and runtime state
     const deploymentId = crypto.randomUUID();
 

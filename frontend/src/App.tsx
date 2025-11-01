@@ -4,6 +4,7 @@ import Landing from './pages/Landing';
 import Analysis from './pages/Analysis';
 import Deploy from './pages/Deploy';
 import Dashboard from './pages/Dashboard';
+import Tools from './pages/Tools';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/deploy" element={<Deploy />} />
           <Route path="/dashboard/:deploymentId" element={<Dashboard />} />
+          <Route path="/tools" element={<Tools />} />
         </Routes>
       </div>
     </Router>
