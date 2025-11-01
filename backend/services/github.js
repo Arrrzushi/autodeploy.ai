@@ -3,16 +3,33 @@ const fs = require('fs').promises;
 const path = require('path');
 const os = require('os');
 
+const GITHUB_URL_REGEX = /https?:\/\/(?:www\.)?github\.com\/[\w.-]+\/[\w.-]+(?:\.git)?/i;
+
+function normalizeRepoUrl(input) {
+  if (!input) return null;
+  const match = String(input).trim().match(GITHUB_URL_REGEX);
+  if (!match) return null;
+  let url = match[0];
+  url = url.replace(/[\s"'`]+$/, '');
+  url = url.replace(/[),.;]+$/, '');
+  return url;
+}
+
 /**
  * Clones a GitHub repository to a temporary directory
  */
 async function cloneRepository(repoUrl) {
   try {
+    const normalizedRepoUrl = normalizeRepoUrl(repoUrl);
+    if (!normalizedRepoUrl || !validateGitHubUrl(normalizedRepoUrl)) {
+      throw new Error('Invalid GitHub repository URL');
+    }
+
     // Create temp directory
     const tempDir = path.join(os.tmpdir(), `repo-${Date.now()}`);
     await fs.mkdir(tempDir, { recursive: true });
 
-    console.log(`Cloning ${repoUrl} to ${tempDir}...`);
+    console.log(`Cloning ${normalizedRepoUrl} to ${tempDir}...`);
     
     // Configure git to not prompt for credentials and handle public repos
     const git = simpleGit({
@@ -23,7 +40,7 @@ async function cloneRepository(repoUrl) {
     });
     
     // Clone with specific options for public repos
-    await git.clone(repoUrl, tempDir, [
+    await git.clone(normalizedRepoUrl, tempDir, [
       '--depth', '1',
       '--single-branch',
       '--no-tags'
@@ -196,7 +213,7 @@ async function cleanupRepository(repoPath) {
  * Validates GitHub URL
  */
 function validateGitHubUrl(url) {
-  const githubPattern = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/;
+  const githubPattern = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+(?:\.git)?\/?$/i;
   return githubPattern.test(url);
 }
 
@@ -204,6 +221,6 @@ module.exports = {
   cloneRepository,
   analyzeStructure,
   cleanupRepository,
-  validateGitHubUrl
+  validateGitHubUrl,
+  normalizeRepoUrl
 };
-

@@ -4,6 +4,7 @@ import { api } from '../api/client';
 export default function Tools() {
   const [repoUrl, setRepoUrl] = useState('');
   const [prefPort, setPrefPort] = useState<number>(3000);
+  const [hostPort, setHostPort] = useState<number | undefined>(undefined);
   const [preflight, setPreflight] = useState<any>(null);
   const [preview, setPreview] = useState<any>(null);
   const [ttlHours, setTtlHours] = useState<number>(6);
@@ -16,7 +17,7 @@ export default function Tools() {
   const runPreflight = async () => {
     setLoading('preflight'); setError(''); setPreflight(null);
     try {
-      const res = await api.buildPreflight({ repoUrl, preferredPort: prefPort, projectId: projectId || undefined });
+      const res = await api.buildPreflight({ repoUrl, preferredPort: prefPort, projectId: projectId || undefined, hostPort });
       setPreflight(res.data);
     } catch (e: any) {
       setError(e?.response?.data?.error || 'Preflight failed');
@@ -58,6 +59,10 @@ export default function Tools() {
         <div className="flex flex-col md:flex-row gap-3">
           <input className="input" placeholder="Repo URL" value={repoUrl} onChange={e=>setRepoUrl(e.target.value)} />
           <input className="input" type="number" placeholder="Preferred Port" value={prefPort} onChange={e=>setPrefPort(parseInt(e.target.value,10)||3000)} />
+          <input className="input" type="number" placeholder="Host Port (optional)" value={hostPort ?? ''} onChange={e=>{
+            const v = e.target.value.trim();
+            setHostPort(v === '' ? undefined : (parseInt(v,10)||undefined));
+          }} />
           <input className="input" placeholder="Project ID (optional)" value={projectId} onChange={e=>setProjectId(e.target.value)} />
           <button className="btn-primary" onClick={runPreflight} disabled={loading==='preflight'}>
             {loading==='preflight' ? 'Running…' : 'Run Preflight'}
@@ -132,4 +137,3 @@ export default function Tools() {
     </div>
   );
 }
-

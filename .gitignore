@@ -10,6 +10,7 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.vscode/
 
 # Database
 *.db
@@ -43,6 +44,7 @@ tmp/
 temp/
 *.tmp
 repo-*
+preflight-build.log*
 
 # Docker
 docker-compose.override.yml

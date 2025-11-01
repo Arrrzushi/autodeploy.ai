@@ -16,8 +16,12 @@ async function dockerBuild(tag, cwd) {
 async function dockerRunDetached(name, image, portMap, env = {}, labels = {}) {
   const envFlags = Object.entries(env).map(([k, v]) => `-e ${k}=${v}`).join(' ');
   const labelFlags = Object.entries(labels).map(([k, v]) => `--label ${k}=${v}`).join(' ');
-  // portMap: { host:'', container: number } -> use random host by empty host
-  const portFlag = portMap?.container ? `-p :${portMap.container}` : '';
+  const containerPort = portMap?.containerPort ?? portMap?.container;
+  const hostPort = portMap?.hostPort ?? portMap?.host;
+  let portFlag = '';
+  if (containerPort) {
+    portFlag = hostPort ? `-p 127.0.0.1:${hostPort}:${containerPort}` : `-p 127.0.0.1::${containerPort}`;
+  }
   const cmd = `docker run -d ${portFlag} --name ${name} ${envFlags} ${labelFlags} ${image}`.trim().replace(/\s+/g, ' ');
   return execCmd(cmd);
 }
@@ -33,4 +37,3 @@ async function dockerStopRm(name) {
 }
 
 module.exports = { execCmd, dockerBuild, dockerRunDetached, dockerInspect, dockerStopRm };
-

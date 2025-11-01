@@ -62,7 +62,7 @@ export const api = {
     apiClient.get(`/api/metrics/${deploymentId}`),
 
   // New endpoints
-  buildPreflight: (data: { repoUrl: string; branch?: string; preferredPort?: number; projectId?: string }) =>
+  buildPreflight: (data: { repoUrl: string; branch?: string; preferredPort?: number; projectId?: string; hostPort?: number }) =>
     apiClient.post('/api/build/preflight', data),
 
   previewCreate: (data: { repoUrl: string; prRef?: string; env?: Record<string,string>; projectId?: string; ttlHours?: number; runMigrations?: boolean }) =>
