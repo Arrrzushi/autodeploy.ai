@@ -1,3 +1,5 @@
+-- backend/prisma/migrations/20251101_init/migration.sql
+
 -- CreateTable
 CREATE TABLE "projects" (
     "id" TEXT NOT NULL,
@@ -5,7 +7,6 @@ CREATE TABLE "projects" (
     "analysis" JSONB NOT NULL,
     "dockerfile" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     CONSTRAINT "projects_pkey" PRIMARY KEY ("id")
 );
 
@@ -18,14 +19,11 @@ CREATE TABLE "deployments" (
     "containerId" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     CONSTRAINT "deployments_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
-ALTER TABLE "deployments" ADD CONSTRAINT "deployments_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
-
-
-
-
+ALTER TABLE "deployments"
+ADD CONSTRAINT "deployments_projectId_fkey"
+FOREIGN KEY ("projectId") REFERENCES "projects"("id")
+ON DELETE CASCADE ON UPDATE CASCADE;

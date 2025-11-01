@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../prisma/client');
+const crypto = require('crypto');
 const githubService = require('../services/github');
 const openaiService = require('../services/openai');
 
-const prisma = new PrismaClient();
+const hasDB = !!process.env.DATABASE_URL;
 
 /**
  * POST /api/analyze-repo
@@ -99,14 +100,18 @@ router.post('/generate-dockerfile', async (req, res) => {
       dockerfile = await openaiService.generateDockerfile(analysis, structure);
     }
 
-    // Save project to database
-    const project = await prisma.project.create({
-      data: {
-        repoUrl: repoUrl || 'unknown',
-        analysis: analysis,
-        dockerfile: dockerfile
-      }
-    });
+    // Save project to database if available
+    let project = { id: `local-${crypto.randomUUID()}` };
+    if (hasDB) {
+      project = await prisma.project.create({
+        data: {
+          id: crypto.randomUUID(),
+          repoUrl: repoUrl || 'unknown',
+          analysis: analysis,
+          dockerfile: dockerfile
+        }
+      });
+    }
 
     res.json({
       projectId: project.id,

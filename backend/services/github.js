@@ -9,7 +9,7 @@ const os = require('os');
 async function cloneRepository(repoUrl) {
   try {
     // Create temp directory
-    const tempDir = path.join('/tmp', `repo-${Date.now()}`);
+    const tempDir = path.join(os.tmpdir(), `repo-${Date.now()}`);
     await fs.mkdir(tempDir, { recursive: true });
 
     console.log(`Cloning ${repoUrl} to ${tempDir}...`);
@@ -206,5 +206,4 @@ module.exports = {
   cleanupRepository,
   validateGitHubUrl
 };
-
 

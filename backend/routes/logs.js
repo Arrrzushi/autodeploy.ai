@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
-// REAL Docker deployment with TCP connection
-const nodeopsService = require('../services/docker-real');
+const { prisma } = require('../prisma/client');
+const nodeopsService = require('../services/nodeops');
 
-const prisma = new PrismaClient();
+const hasDB = !!process.env.DATABASE_URL;
 
 /**
  * GET /api/logs/:deploymentId
@@ -16,10 +15,16 @@ router.get('/logs/:deploymentId', async (req, res) => {
     const { since } = req.query;
 
     // Check if deployment exists
-    const deployment = await prisma.deployment.findUnique({
-      where: { id: deploymentId },
-      include: { project: true }
-    });
+    let deployment;
+    if (hasDB) {
+      deployment = await prisma.deployment.findUnique({
+        where: { id: deploymentId },
+        include: { project: true }
+      });
+    } else {
+      const runtime = nodeopsService.getDeployment(deploymentId);
+      deployment = runtime ? { id: deploymentId, project: null } : null;
+    }
 
     if (!deployment) {
       return res.status(404).json({ error: 'Deployment not found' });
@@ -60,16 +65,18 @@ router.get('/health/:deploymentId', async (req, res) => {
   try {
     const { deploymentId } = req.params;
 
-    // First get the deployment from database to get the mock deployment ID
-    const deployment = await prisma.deployment.findUnique({
-      where: { id: deploymentId }
-    });
+    let deployment;
+    if (hasDB) {
+      deployment = await prisma.deployment.findUnique({ where: { id: deploymentId } });
+    } else {
+      deployment = nodeopsService.getDeployment(deploymentId);
+    }
 
     if (!deployment) {
       return res.status(404).json({ error: 'Deployment not found' });
     }
 
-    // Use the deployment ID to get metrics from mock service
+    // Use the deployment ID to get metrics from runtime service
     const metrics = nodeopsService.getMetrics(deploymentId);
 
     if (!metrics) {
@@ -134,5 +141,3 @@ router.get('/metrics/:deploymentId', async (req, res) => {
 });
 
 module.exports = router;
-
-

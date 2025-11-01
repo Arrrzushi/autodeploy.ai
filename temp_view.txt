@@ -21,56 +21,6 @@ const activeContainers = new Map();
 const containerLogs = new Map();
 const containerMetrics = new Map();
 
-// Detect container port from Dockerfile content (first EXPOSE)
-function detectContainerPort(dockerfileContent) {
-  try {
-    const match = dockerfileContent.match(/^[ \t]*EXPOSE[ \t]+(\d+)/im);
-    if (match) return parseInt(match[1], 10);
-  } catch {}
-  return 3000;
-}
-
-// Provide placeholder app files to satisfy common Dockerfile COPY/commands
-async function applyPlaceholderContext(buildDir, dockerfileContent, projectName) {
-  const lower = (dockerfileContent || '').toLowerCase();
-  // Keep context small
-  const dockerignore = `node_modules\n.git\n.prisma\nDockerfile\n*.log\n`;
-  await fs.writeFile(path.join(buildDir, '.dockerignore'), dockerignore);
-
-  if (lower.includes('node') || lower.includes('npm') || lower.includes('yarn') || lower.includes('pnpm')) {
-    const packageJson = {
-      name: projectName,
-      version: '1.0.0',
-      main: 'server.js',
-      scripts: { start: 'node server.js' },
-      dependencies: { express: '^4.18.0' }
-    };
-    await fs.writeFile(path.join(buildDir, 'package.json'), JSON.stringify(packageJson, null, 2));
-    const serverCode = `const express = require('express');\nconst app = express();\nconst port = process.env.PORT || 3000;\napp.get('/', (req, res) => res.json({ app: '${projectName}', status: 'running', ts: new Date().toISOString() }));\napp.listen(port, '0.0.0.0', () => console.log('${projectName} on ' + port));\n`;
-    await fs.writeFile(path.join(buildDir, 'server.js'), serverCode);
-    return;
-  }
-
-  if (lower.includes('python') || lower.includes('pip') || lower.includes('poetry')) {
-    await fs.writeFile(path.join(buildDir, 'requirements.txt'), 'flask\n');
-    const appPy = `from flask import Flask, jsonify\nimport os\napp = Flask(__name__)\n@app.get('/')\ndef root():\n    return jsonify(app='${projectName}', status='running')\nif __name__ == '__main__':\n    port = int(os.environ.get('PORT', '3000'))\n    app.run(host='0.0.0.0', port=port)\n`;
-    await fs.writeFile(path.join(buildDir, 'app.py'), appPy);
-    return;
-  }
-
-  // Fallback minimal Node app
-  const packageJson = {
-    name: projectName,
-    version: '1.0.0',
-    main: 'server.js',
-    scripts: { start: 'node server.js' },
-    dependencies: { express: '^4.18.0' }
-  };
-  await fs.writeFile(path.join(buildDir, 'package.json'), JSON.stringify(packageJson, null, 2));
-  const serverCode = `const express = require('express');\nconst app = express();\nconst port = process.env.PORT || 3000;\napp.get('/', (req, res) => res.json({ app: '${projectName}', status: 'running', ts: new Date().toISOString() }));\napp.listen(port, '0.0.0.0', () => console.log('${projectName} on ' + port));\n`;
-  await fs.writeFile(path.join(buildDir, 'server.js'), serverCode);
-}
-
 /**
  * Build Docker image from Dockerfile
  */
@@ -82,13 +32,59 @@ async function buildImage(dockerfile, projectName, projectId) {
     const buildDir = path.join(__dirname, '..', 'repos', `build-${projectId}`);
     await fs.mkdir(buildDir, { recursive: true });
 
-    // Write AI Dockerfile if provided; otherwise minimal Node Dockerfile
-let dockerfileContent = (dockerfile && typeof dockerfile === 'string' && dockerfile.trim().length > 0)
-  ? dockerfile
-  : FROM node:18-alpine\nWORKDIR /app\nCOPY package.json ./\nRUN npm install --only=production\nCOPY server.js ./\nEXPOSE 3000\nCMD [\"npm\", \"start\"];
-await fs.writeFile(path.join(buildDir, 'Dockerfile'), dockerfileContent);
-// Placeholders for common stacks to satisfy COPY and run
-await applyPlaceholderContext(buildDir, dockerfileContent, projectName);// Create tarball of build context
+    // Write a working Dockerfile (ignore the AI-generated one for now - it's for display only)
+    const workingDockerfile = `FROM node:18-alpine
+WORKDIR /app
+COPY package.json ./
+RUN npm install --only=production
+COPY server.js ./
+EXPOSE 3000
+CMD ["npm", "start"]`;
+    
+    await fs.writeFile(path.join(buildDir, 'Dockerfile'), workingDockerfile);
+    
+    // Create a minimal Node.js app
+    const packageJson = {
+      name: projectName,
+      version: '1.0.0',
+      main: 'server.js',
+      scripts: {
+        start: 'node server.js'
+      },
+      dependencies: {
+        express: '^4.18.0'
+      }
+    };
+    await fs.writeFile(
+      path.join(buildDir, 'package.json'),
+      JSON.stringify(packageJson, null, 2)
+    );
+    
+    // Create a simple Express server
+    const serverCode = `const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.json({ 
+    app: '${projectName}',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    message: 'Deployed by AutoDeploy.AI'
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', uptime: process.uptime() });
+});
+
+app.listen(port, '0.0.0.0', () => {
+  console.log('${projectName} listening on port ' + port);
+});`;
+
+    await fs.writeFile(path.join(buildDir, 'server.js'), serverCode);
+
+    // Create tarball of build context
     const tarStream = tar.pack(buildDir);
     const imageName = `autodeploy-${projectName.toLowerCase().replace(/[^a-z0-9]/g, '-')}:latest`;
     
@@ -137,8 +133,8 @@ await applyPlaceholderContext(buildDir, dockerfileContent, projectName);// Creat
 
     console.log(`âœ… Image ${imageName} built successfully`);
     
-    const containerPort = detectContainerPort(dockerfileContent);
-    return { imageName, buildLogs, containerPort };
+    return { imageName, buildLogs };
+  } catch (error) {
     console.error('Docker build error:', error);
     throw new Error(`Failed to build image: ${error.message}`);
   }
@@ -147,7 +143,7 @@ await applyPlaceholderContext(buildDir, dockerfileContent, projectName);// Creat
 /**
  * Run container from built image
  */
-async function runContainer(imageName, projectName, deploymentId, containerPort) {
+async function runContainer(imageName, projectName, deploymentId) {
   try {
     console.log(`ðŸš€ Starting container for ${projectName}...`);
 
@@ -156,7 +152,7 @@ async function runContainer(imageName, projectName, deploymentId, containerPort)
       Image: imageName,
       name: `autodeploy-${deploymentId.substring(0, 8)}`,
       ExposedPorts: {
-        [`${containerPort}/tcp`]: {}
+        '3000/tcp': {}
       },
       HostConfig: {
         PublishAllPorts: true,
@@ -164,7 +160,7 @@ async function runContainer(imageName, projectName, deploymentId, containerPort)
       },
       Env: [
         `NODE_ENV=production`,
-        `PORT=${containerPort}`
+        `PORT=3000`
       ]
     });
 
@@ -175,7 +171,7 @@ async function runContainer(imageName, projectName, deploymentId, containerPort)
     const containerId = containerInfo.Id.substring(0, 12);
     
     // Get the actual assigned port
-    const actualPort = containerInfo.NetworkSettings.Ports[`${containerPort}/tcp`][0].HostPort;
+    const actualPort = containerInfo.NetworkSettings.Ports['3000/tcp'][0].HostPort;
 
     // Store container reference
     activeContainers.set(deploymentId, {
@@ -218,10 +214,10 @@ async function runContainer(imageName, projectName, deploymentId, containerPort)
 async function deployContainer(dockerfile, projectName, deploymentId) {
   try {
     // Build the image
-    const { imageName, buildLogs, containerPort } = await buildImage(dockerfile, projectName, deploymentId);
+    const { imageName, buildLogs } = await buildImage(dockerfile, projectName, deploymentId);
 
     // Run the container
-    const deployment = await runContainer(imageName, projectName, deploymentId, containerPort);
+    const deployment = await runContainer(imageName, projectName, deploymentId);
 
     return {
       ...deployment,
@@ -415,6 +411,3 @@ module.exports = {
   initializeLogs,
   initializeMetrics
 };
-
-
-
