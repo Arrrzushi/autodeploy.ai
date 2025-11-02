@@ -1,35 +1,11 @@
 
-
-
 <!-- =========================================================
-     AUTO DEPLOY . AI — Animated, Designer-Grade README (No Emojis)
+     AUTO DEPLOY . AI
      ========================================================= -->
 
-<!-- HERO: animated gradient banner -->
+<!-- HERO (file-based; animations work on GitHub) -->
 <p align="center">
-  <svg width="100%" height="220" viewBox="0 0 1280 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AutoDeploy.AI">
-    <defs>
-      <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#00F0FF">
-          <animate attributeName="stop-color" values="#00F0FF;#9740FF;#FF00C8;#00F0FF" dur="12s" repeatCount="indefinite"/>
-        </stop>
-        <stop offset="100%" stop-color="#0ea5e9">
-          <animate attributeName="stop-color" values="#0ea5e9;#22d3ee;#f59e0b;#0ea5e9" dur="12s" repeatCount="indefinite"/>
-        </stop>
-      </linearGradient>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="6.5" result="coloredBlur"/>
-        <feMerge>
-          <feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-    </defs>
-    <rect width="100%" height="220" fill="#0B1021"/>
-    <g filter="url(#glow)">
-      <text x="50%" y="48%" text-anchor="middle" font-family="JetBrains Mono, Menlo, Consolas, monospace" font-size="42" fill="url(#g1)" letter-spacing="2.5">AUTO DEPLOY . AI</text>
-      <text x="50%" y="74%" text-anchor="middle" font-family="Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="18" fill="#C9D8FF" opacity="0.9">Previews that ship themselves.</text>
-    </g>
-  </svg>
+  <img src="assets/hero.svg" width="100%" alt="AutoDeploy.AI — designer-grade DevOps">
 </p>
 
 <!-- Sub-hero kinetic typing -->
@@ -39,14 +15,14 @@
 
 <!-- Status badges (sleek, neutral) -->
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Status-MVP_Launch-00F0FF?style=for-the-badge&labelColor=0B1021&color=00F0FF"></a>
-  <a href="#"><img src="https://img.shields.io/badge/License-MIT-9740FF?style=for-the-badge&labelColor=0B1021&color=9740FF"></a>
-  <a href="#"><img src="https://img.shields.io/badge/OpenAI-GPT--4-FF00C8?style=for-the-badge&labelColor=0B1021&color=FF00C8"></a>
+  <img src="https://img.shields.io/badge/Status-MVP_Launch-00F0FF?style=for-the-badge">
+  <img src="https://img.shields.io/badge/License-MIT-9740FF?style=for-the-badge">
+  <img src="https://img.shields.io/badge/OpenAI-GPT--4-FF00C8?style=for-the-badge">
 </p>
 
 <!-- WAVE SEPARATOR -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/waves/main/wave-top.svg" alt="" width="100%">
+  <img src="assets/waves/wave-top.svg" alt="" width="100%">
 </p>
 
 <div align="center">
@@ -61,33 +37,30 @@
 
 ## Before / After
 
-<!-- animated comparison bars (SVG) -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/anim/main/compare-bars.svg" width="900" alt="animated comparison">
+  <img src="assets/anim/compare-bars.svg" width="900" alt="animated comparison">
 </p>
 
 <table>
-<thead>
-<tr><th>Previous Reality</th><th>With AutoDeploy.AI</th></tr>
-</thead>
-<tbody>
-<tr><td>Manual Dockerfiles and tribal knowledge</td><td>AI-synthesized, audited Dockerfiles</td></tr>
-<tr><td>Security bolted on near release</td><td>SBOM + CVE gating in the critical path</td></tr>
-<tr><td>Preview environments take hours</td><td>One-click previews with isolated Postgres</td></tr>
-<tr><td>Operational drift and guesswork</td><td>Health specs, smoke tests, rich telemetry</td></tr>
-</tbody>
+  <thead>
+    <tr><th>Previous Reality</th><th>With AutoDeploy.AI</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Manual Dockerfiles and tribal knowledge</td><td>AI-synthesized, audited Dockerfiles</td></tr>
+    <tr><td>Security bolted on near release</td><td>SBOM + CVE gating in the critical path</td></tr>
+    <tr><td>Preview environments take hours</td><td>One-click previews with isolated Postgres</td></tr>
+    <tr><td>Operational drift and guesswork</td><td>Health specs, smoke tests, rich telemetry</td></tr>
+  </tbody>
 </table>
 
-<!-- subtle divider -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/waves/main/line-gradient.svg" width="720" alt="">
+  <img src="assets/waves/line-gradient.svg" width="720" alt="">
 </p>
 
 ## Architecture
 
-<!-- animated pulse line -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/anim/main/pulse-line.svg" width="820" alt="">
+  <img src="assets/anim/pulse-line.svg" width="820" alt="">
 </p>
 
 ```mermaid
@@ -126,21 +99,19 @@ graph TB
     O & P & Q --> R[Full-Stack Preview]
     R --> S[Telemetry: Logs · Metrics · Health]
     R --> T[NodeOps Production Deploy]
-````
+```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/waves/main/wave-mid.svg" alt="" width="100%">
+  <img src="assets/waves/wave-mid.svg" alt="" width="100%">
 </p>
 
 ## Feature Stack
 
-<!-- animated “chips” as SVG badges -->
-
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/anim/main/chips-intelligence.svg" height="28" alt="">
-  <img src="https://raw.githubusercontent.com/your-asset/anim/main/chips-security.svg"   height="28" alt="">
-  <img src="https://raw.githubusercontent.com/your-asset/anim/main/chips-previews.svg"  height="28" alt="">
-  <img src="https://raw.githubusercontent.com/your-asset/anim/main/chips-telemetry.svg" height="28" alt="">
+  <img src="assets/anim/chips-intelligence.svg" height="28" alt="">
+  <img src="assets/anim/chips-security.svg"   height="28" alt="">
+  <img src="assets/anim/chips-previews.svg"   height="28" alt="">
+  <img src="assets/anim/chips-telemetry.svg"  height="28" alt="">
 </p>
 
 <div align="center">
@@ -178,7 +149,7 @@ security_scan:
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/waves/main/line-gradient.svg" width="720" alt="">
+  <img src="assets/waves/line-gradient.svg" width="720" alt="">
 </p>
 
 ## Quick Start
@@ -216,8 +187,8 @@ $env:AI_API_KEY    = "your-ai-key-here"
 $env:DOCKER_HOST   = "tcp://localhost:2375"
 
 # Options
-$env:FRONTEND_URLS       = "http://localhost:5173"
-$env:PREVIEW_TTL_HOURS   = "72"
+$env:FRONTEND_URLS         = "http://localhost:5173"
+$env:PREVIEW_TTL_HOURS     = "72"
 $env:SECURITY_MAX_CRITICAL = "0"
 
 npx prisma generate
@@ -254,7 +225,7 @@ Write-Host "Preview URL: $($preview.url)"
 </details>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/waves/main/wave-mid.svg" alt="" width="100%">
+  <img src="assets/waves/wave-mid.svg" alt="" width="100%">
 </p>
 
 ## API
@@ -269,10 +240,8 @@ Write-Host "Preview URL: $($preview.url)"
 | `/api/deploy`               | POST   | Deploy to production        | Active  |
 | `/api/deploy/nodeops`       | POST   | Deploy via NodeOps          | Planned |
 
-<!-- animated API ruler -->
-
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/anim/main/ruler-progress.svg" width="860" alt="">
+  <img src="assets/anim/ruler-progress.svg" width="860" alt="">
 </p>
 
 ## Status
@@ -290,7 +259,7 @@ Write-Host "Preview URL: $($preview.url)"
 </div>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-asset/waves/main/wave-bottom.svg" alt="" width="100%">
+  <img src="assets/waves/wave-bottom.svg" alt="" width="100%">
 </p>
 
 ## Tech Stack
@@ -318,15 +287,4 @@ backend:
 * PRs: [https://github.com/your-repo/pulls](https://github.com/your-repo/pulls)
 * Docs: [https://docs.autodeploy.ai](https://docs.autodeploy.ai)
 * Discussion: [https://discord.gg/your-invite](https://discord.gg/your-invite)
-
----
-
-<p align="center">
-  <a href="https://github.com/your-repo/autodeploy.ai">
-    <img src="https://raw.githubusercontent.com/your-asset/anim/main/cta-scanline.svg" width="880" alt="Clone and start">
-  </a>
-</p>
-```
-
----
 
