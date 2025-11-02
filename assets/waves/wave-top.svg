@@ -1,0 +1,18 @@
+<svg width="1280" height="260" viewBox="0 0 1280 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AutoDeploy.AI">
+  <defs>
+    <linearGradient id="sorbet" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF9AD5">
+        <animate attributeName="stop-color" values="#FF9AD5;#FFC6A5;#A7E1FF;#B1F1D1;#C7B5FF;#FFF59E;#FF9AD5" dur="14s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="1" stop-color="#A7E1FF">
+        <animate attributeName="stop-color" values="#A7E1FF;#C7B5FF;#B1F1D1;#FFF59E;#FF9AD5;#FFC6A5;#A7E1FF" dur="14s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="100%" height="100%" fill="#14121A"/>
+  <g filter="url(#glow)">
+    <text x="50%" y="48%" text-anchor="middle" font-family="JetBrains Mono, Menlo, Consolas, monospace" font-size="48" fill="url(#sorbet)" letter-spacing="3">AUTO DEPLOY . AI</text>
+    <text x="50%" y="72%" text-anchor="middle" font-family="Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="20" fill="#FFEFF6" opacity="0.95">Previews that ship themselves • Telemetry from Day Zero</text>
+  </g>
+</svg>

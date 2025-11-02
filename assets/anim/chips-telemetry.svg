@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="32" role="img" aria-label="Telemetry">
+  <defs>
+    <linearGradient id="ct" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#B1F1D1"/><stop offset="1" stop-color="#A7E1FF"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" rx="16" ry="16" width="180" height="32" fill="#1B1730" stroke="#2A2137"/>
+  <rect x="-180" y="0" rx="16" ry="16" width="180" height="32" fill="url(#ct)" opacity="0.18">
+    <animate attributeName="x" values="-180;180" dur="3.0s" repeatCount="indefinite"/>
+  </rect>
+  <text x="90" y="21" text-anchor="middle" fill="#FFEFF6" font-family="Inter, Arial" font-size="13" font-weight="600">Telemetry</text>
+</svg>

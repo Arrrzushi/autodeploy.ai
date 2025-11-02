@@ -1,0 +1,25 @@
+<svg viewBox="0 0 860 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Progress ruler">
+  <style>
+    .tick{stroke:#2A2137;stroke-width:1.6}
+    .label{fill:#EFDFF7;font:600 12px Inter, Arial, sans-serif}
+  </style>
+  <rect width="860" height="60" rx="10" fill="#14121A"/>
+  <g transform="translate(20,20)">
+    <rect x="0" y="8" width="820" height="8" fill="#1B1730" rx="4"/>
+    <rect x="0" y="8" width="0" height="8" fill="#B1F1D1" rx="4">
+      <animate attributeName="width" values="0;820;0" dur="7s" repeatCount="indefinite"/>
+    </rect>
+    <g class="tick">
+      <line x1="0"   y1="6" x2="0"   y2="20"/>
+      <line x1="205" y1="6" x2="205" y2="20"/>
+      <line x1="410" y1="6" x2="410" y2="20"/>
+      <line x1="615" y1="6" x2="615" y2="20"/>
+      <line x1="820" y1="6" x2="820" y2="20"/>
+    </g>
+    <text class="label" x="0" y="0">Analyze</text>
+    <text class="label" x="205" y="0">Build</text>
+    <text class="label" x="410" y="0">Test</text>
+    <text class="label" x="615" y="0">Secure</text>
+    <text class="label" x="770" y="0">Preview</text>
+  </g>
+</svg>

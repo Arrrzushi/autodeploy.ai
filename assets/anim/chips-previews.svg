@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="170" height="32" role="img" aria-label="Previews">
+  <defs>
+    <linearGradient id="cp" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFC6A5"/><stop offset="1" stop-color="#FF9AD5"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" rx="16" ry="16" width="170" height="32" fill="#1B1730" stroke="#2A2137"/>
+  <rect x="-170" y="0" rx="16" ry="16" width="170" height="32" fill="url(#cp)" opacity="0.18">
+    <animate attributeName="x" values="-170;170" dur="3.1s" repeatCount="indefinite"/>
+  </rect>
+  <text x="85" y="21" text-anchor="middle" fill="#FFEFF6" font-family="Inter, Arial" font-size="13" font-weight="600">Previews</text>
+</svg>

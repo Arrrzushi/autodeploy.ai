@@ -1,0 +1,14 @@
+<svg viewBox="0 0 820 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pulse">
+  <rect width="820" height="80" fill="#14121A"/>
+  <path id="trace" d="M10,40 L110,40 L160,22 L200,58 L240,35 L280,45 L320,40 L420,40 L470,15 L520,65 L560,35 L600,45 L640,40 L810,40"
+        fill="none" stroke="#C7B5FF" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M10,40 L110,40 L160,22 L200,58 L240,35 L280,45 L320,40 L420,40 L470,15 L520,65 L560,35 L600,45 L640,40 L810,40"
+        fill="none" stroke="#C7B5FF" stroke-width="3" stroke-linejoin="round" stroke-dasharray="900" stroke-dashoffset="900">
+    <animate attributeName="stroke-dashoffset" values="900;0" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4.5" fill="#FFF59E">
+    <animateMotion dur="3s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#trace"/>
+    </animateMotion>
+  </circle>
+</svg>

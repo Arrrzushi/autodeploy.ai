@@ -1,0 +1,27 @@
+<svg viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Before/After comparison">
+  <style>
+    .label{fill:#FFEFF6;font:600 14px Inter, Arial, sans-serif}
+    .bg{fill:#14121A}
+    .frame{fill:none;stroke:#2A2137;stroke-width:1.6}
+  </style>
+  <rect class="bg" x="0" y="0" width="900" height="140" rx="10"/>
+  <rect class="frame" x="10" y="10" width="880" height="120" rx="10"/>
+
+  <text class="label" x="20" y="38">Manual Dockerfiles</text>
+  <rect x="260" y="26" width="520" height="12" fill="#1B1730" rx="8"/>
+  <rect x="260" y="26" width="40" height="12" rx="8" fill="#FF9AD5">
+    <animate attributeName="width" values="40;380;340;420" dur="5s" repeatCount="indefinite"/>
+  </rect>
+
+  <text class="label" x="20" y="78">Late Security</text>
+  <rect x="260" y="66" width="520" height="12" fill="#1B1730" rx="8"/>
+  <rect x="260" y="66" width="30" height="12" rx="8" fill="#A7E1FF">
+    <animate attributeName="width" values="30;420;300;460" dur="5s" repeatCount="indefinite"/>
+  </rect>
+
+  <text class="label" x="20" y="118">Slow Previews</text>
+  <rect x="260" y="106" width="520" height="12" fill="#1B1730" rx="8"/>
+  <rect x="260" y="106" width="20" height="12" rx="8" fill="#FFC6A5">
+    <animate attributeName="width" values="20;360;280;520" dur="5s" repeatCount="indefinite"/>
+  </rect>
+</svg>

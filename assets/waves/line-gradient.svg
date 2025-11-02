@@ -1,0 +1,11 @@
+<svg viewBox="0 0 720 8" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF9AD5"/><stop offset="0.5" stop-color="#FFC6A5"/><stop offset="1" stop-color="#A7E1FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="2" fill="#2A2137" y="3"/>
+  <rect width="80" height="2" fill="url(#lg)" y="3" rx="1">
+    <animate attributeName="width" values="80;720;80" dur="6s" repeatCount="indefinite"/>
+  </rect>
+</svg>
