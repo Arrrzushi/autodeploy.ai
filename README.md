@@ -20,10 +20,7 @@
   <img src="https://img.shields.io/badge/OpenAI-GPT--4-FF00C8?style=for-the-badge">
 </p>
 
-<!-- WAVE SEPARATOR -->
-<p align="center">
-  <img src="assets/waves/wave-top.svg" alt="" width="100%">
-</p>
+
 
 <div align="center">
   <a href="#quick-start">Quick Start</a> ·
@@ -35,11 +32,6 @@
 
 ---
 
-## Before / After
-
-<p align="center">
-  <img src="assets/anim/compare-bars.svg" width="900" alt="animated comparison">
-</p>
 
 <table>
   <thead>
@@ -53,15 +45,10 @@
   </tbody>
 </table>
 
-<p align="center">
-  <img src="assets/waves/line-gradient.svg" width="720" alt="">
-</p>
+
 
 ## Architecture
 
-<p align="center">
-  <img src="assets/anim/pulse-line.svg" width="820" alt="">
-</p>
 
 ```mermaid
 %%{init: { "theme": "dark", "themeVariables": {
@@ -101,9 +88,7 @@ graph TB
     R --> T[NodeOps Production Deploy]
 ```
 
-<p align="center">
-  <img src="assets/waves/wave-mid.svg" alt="" width="100%">
-</p>
+
 
 ## Feature Stack
 
@@ -148,9 +133,6 @@ security_scan:
   auto_fix: true  # proposes Dockerfile patches
 ```
 
-<p align="center">
-  <img src="assets/waves/line-gradient.svg" width="720" alt="">
-</p>
 
 ## Quick Start
 
@@ -224,9 +206,7 @@ Write-Host "Preview URL: $($preview.url)"
 
 </details>
 
-<p align="center">
-  <img src="assets/waves/wave-mid.svg" alt="" width="100%">
-</p>
+
 
 ## API
 
@@ -240,9 +220,7 @@ Write-Host "Preview URL: $($preview.url)"
 | `/api/deploy`               | POST   | Deploy to production        | Active  |
 | `/api/deploy/nodeops`       | POST   | Deploy via NodeOps          | Planned |
 
-<p align="center">
-  <img src="assets/anim/ruler-progress.svg" width="860" alt="">
-</p>
+
 
 ## Status
 
@@ -258,9 +236,7 @@ Write-Host "Preview URL: $($preview.url)"
 
 </div>
 
-<p align="center">
-  <img src="assets/waves/wave-bottom.svg" alt="" width="100%">
-</p>
+
 
 ## Tech Stack
 
